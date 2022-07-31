@@ -35,9 +35,9 @@ set(doctest_folder "${CMAKE_CURRENT_SOURCE_DIR}/") # in order to have the mpi ex
 if(MAIN_PROJECT)
     # use a special hidden version of the header which directly includes the 2 parts - proper reporting of file/line locations during dev
     target_include_directories(${PROJECT_NAME} INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/scripts/development_only/>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/scripts/development_only/doctest>
         $<BUILD_INTERFACE:${doctest_parts_folder}>
-        $<BUILD_INTERFACE:${doctest_folder}>)
+        $<BUILD_INTERFACE:${doctest_folder}/doctest>)
 
     # add a custom target that assembles the single header when any of the parts are touched
     add_custom_command(
@@ -50,7 +50,7 @@ if(MAIN_PROJECT)
 
     add_custom_target(assemble_single_header ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doctest/doctest.h)
 else()
-    target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>)
+    target_include_directories(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/doctest>)
 endif()
 
 # hack to support building on XCode 6 and 7 - propagate the definition to everything
@@ -129,7 +129,7 @@ if(NOT ${DOCTEST_NO_INSTALL})
     install(
         TARGETS ${PROJECT_NAME}
         EXPORT "${targets_export_name}"
-        INCLUDES DESTINATION "${include_install_dir}"
+        INCLUDES DESTINATION "${include_install_dir}/doctest"
     )
 
     install(
